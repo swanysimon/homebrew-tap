@@ -1,8 +1,8 @@
 class Mdlint < Formula
   desc "Fast, opinionated Markdown formatter and linter"
   homepage "https://github.com/swanysimon/mdlint"
-  url "https://github.com/swanysimon/mdlint/archive/refs/tags/v0.4.1.tar.gz"
-  sha256 "569376ef89161a74f210be7c6cbdb29a43a902e7897142e1c6f6ad4bd0ee5b0c"
+  url "https://github.com/swanysimon/mdlint/archive/refs/tags/v0.4.2.tar.gz"
+  sha256 "23ef8efd5bbefd68c4c5230c1119bda64e4c6d69ecca97377734121458af21d4"
   license "Unlicense"
 
   livecheck do
