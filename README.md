@@ -1,22 +1,26 @@
 # homebrew-tap
 
-My own homebrew taps
+My own homebrew taps.
 
-## How do I install these formulae?
+There's likely only one formula you care about: [`mdlint`](https://github.com/swanysimon/mdlint). The others are highly
+experimental and for my own use, not necessarily yours.
 
-```sh
+```shell
+brew tap swanysimon/tap
+brew install mdlint
+
+# OR
+
 brew install swanysimon/tap/<formula>
 ```
 
-Or `brew tap swanysimon/tap` and then `brew install <formula>`.
-
-Or, in a `brew bundle` `Brewfile`:
+You could also use a `Brewfile`:
 
 ```ruby
 tap "swanysimon/tap"
-brew "<formula>"
+brew "mdlint"
+
+# OR
+
+brew "swanysimon/tap/mdlint"
 ```
-
-## Documentation
-
-`brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
