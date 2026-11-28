@@ -9,6 +9,15 @@ on:
         required: true
       head_sha:
         description: Expected pull request head commit SHA (optional)
+  workflow_call:
+    inputs:
+      pull_request:
+        description: Pull request number
+        required: true
+        type: string
+      head_sha:
+        description: Expected pull request head commit SHA (optional)
+        type: string
 
 permissions: {}
 

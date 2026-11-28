@@ -1,0 +1,57 @@
+# Publishes bottles without a manual dispatch: when brew test-bot passes on an
+# autobump pull request, hand it to the brew pr-pull workflow.
+name: brew pr-pull (auto)
+
+on:
+  workflow_run:
+    workflows: [brew test-bot]
+    types: [completed]
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -xeuo pipefail {0}
+
+jobs:
+  resolve-pr:
+    if: >-
+      github.event.workflow_run.conclusion == 'success'
+      && github.event.workflow_run.event == 'pull_request'
+      && startsWith(github.event.workflow_run.head_branch, 'bump-')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      number: ${{ steps.pr.outputs.number }}
+    steps:
+      - name: Find the pull request for this branch
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          number=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --state open \
+            --json number --jq '.[0].number')
+          if [[ -z "$number" ]]
+          then
+            echo "no open pull request for $BRANCH" >&2
+            exit 1
+          fi
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+
+  pr-pull:
+    needs: resolve-pr
+    permissions:
+      actions: read
+      attestations: write
+      checks: read
+      contents: write
+      id-token: write
+      issues: read
+      packages: write
+      pull-requests: write
+    uses: ./.github/workflows/publish.yml
+    with:
+      pull_request: ${{ needs.resolve-pr.outputs.number }}
+      head_sha: ${{ github.event.workflow_run.head_sha }}
